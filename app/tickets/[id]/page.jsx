@@ -1,3 +1,21 @@
+import {notFound} from "next/navigation";
+
+//Control what happens when a dynamic segment is visited that was not generated with generateStaticParams.
+// true (default): Dynamic segments not included in generateStaticParams are generated on demand.
+// false: Dynamic segments not included in generateStaticParams will return a 404.
+export const dynamicParams = true
+
+
+export async function generateStaticParams(){
+    const res = await fetch('http://localhost:4000/tickets')
+
+    const tickets = await res.json()
+
+    return tickets.map((ticket) => ({
+        id: ticket.id,
+    }))
+}
+
 
 async function getTicket(id) {
     const res = await fetch(`http://localhost:4000/tickets/${id}`, {
@@ -6,9 +24,12 @@ async function getTicket(id) {
         }
     });
 
+    if (!res.ok) {
+        notFound() //returns a not found (404) page
+    }
+
     return res.json();
 }
-
 
 
 export default async function TicketDetails ({params}){
