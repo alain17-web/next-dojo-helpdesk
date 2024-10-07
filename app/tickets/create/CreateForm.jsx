@@ -3,7 +3,7 @@
 import {useRouter} from "next/navigation";
 import {useState} from "react";
 
-export default function createForm() {
+export default function CreateForm() {
 
     const router = useRouter();
 
